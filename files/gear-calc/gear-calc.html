@@ -86,7 +86,7 @@
 <p>Peter Heinle has <a href="http://photos.airpost.net/cycling/bicycle-cassette-cogs.xls" target="_blank">an Excel spreadsheet</a> online with the tooth counts of a large number of 10-through 13-speed cassettes</p>
   <script>
 //<![CDATA[
-        <!--
+        <!-- Declare variables -->
         //----------------------------------------------------------
         var nWheel=1
         // was 0
@@ -106,18 +106,24 @@
 
         //----------------------------------------------------------
 
+<!-- This enters the chainwheel sizes into the calculation-->
+
         function get_rings()
         {
-        rings = new Array(parseFloat(document.ringform.ring1.value),
-                    parseFloat(document.ringform.ring2.value),
-                    parseFloat(document.ringform.ring3.value),
-                    0);
+        rings = new Array
+		            (parseFloat(document.ringform.ring1.value),
+                     parseFloat(document.ringform.ring2.value),
+                     parseFloat(document.ringform.ring3.value),
+					 0);
         return rings;
         }
 
+<!-- this enters the sprockets into the calculator -->
+
         function get_rears()
         {
-        rears = new Array(parseFloat(document.ringform.rear1.value),
+        rears = new Array
+		           (parseFloat(document.ringform.rear1.value),
                     parseFloat(document.ringform.rear2.value),
                     parseFloat(document.ringform.rear3.value),
                     parseFloat(document.ringform.rear4.value),
@@ -137,14 +143,26 @@
         //----------------------------------------------------------
 
         function calc_rings(rings, rears)
+
+<!-- parsefloat converts text to floats, All data used in calculation is entered as text and ocnverted to floats -->
+
         {
         wheelval=parseFloat(nWheel);
 
         ringData = new Array(5);
-        for (n=0; rings[n]>0; n++) {
+        for (n=0; rings[n]>0; n++) { <!-- Chainrings, lines in array -->
         ringData[n] = new Array(15);
-        for (c=0; rears[c]>0; c++) {
+        for (c=0; rears[c]>0; c++) {   <!--Sprockets, columns in array-->
+
+<!-- Following is the actual calculation of drive ratio for each item in the two-dimensional array -->
+
         ringData[n][c]=mphmult*(rings[n]/rears[c])*wheelval/nMode;
+
+<!-- To separate the tire width from the rim diameter, ccange this to something like this. 25.4 converts to inches-->
+
+<!--    ringData[n][c]=mphmult*(rings[n]/rears[c])*(wheelval+ 2 * tirewidth)0/(25.4*nMod)e;
+
+
         // tjl - Do rounding at printout instead - ringData[n][c]=rounder(mphmult*(rings[n]/rears[c])*wheelval/nMode);
         }
         }
@@ -153,35 +171,51 @@
 
         //----------------------------------------------------------
 
+<!-- nWheel will now be only rim diameter-->
+
         function converter()
         {
-        var viewInteger, viewString
+        var viewInteger, viewString   <!-- declare vairables-->
+
         viewInteger=document.ringform.diameter.selectedIndex
         viewString=document.ringform.diameter.options[viewInteger].value
         tiresize=document.ringform.diameter.options[viewInteger].text
-        nWheel=parseFloat(viewString)
+        nWheel=parseFloat(viewString) <!-- This converts the text entry option for wheel diameter into a float -->
+
+<!--following four lines are new and are to enter tire width-->
+
+<!--        viewInteger=document.ringform.tirewidth.selectedIndex
+<!--        viewString=document.ringform.tirewidth.options[viewInteger].value
+<!--        tiresize=document.ringform.tirewidth.options[viewInteger].text
+<!--        nWidth=parseFloat(viewString) <!-- This converts the text entry option (in mm) for tire width into a float.-->
+
+<!--End of new section-->
 
         viewInteger=document.ringform.crankdiam.selectedIndex
         viewString=document.ringform.crankdiam.options[viewInteger].value
         cranklength=document.ringform.crankdiam.options[viewInteger].text
-        nCrank=parseFloat(viewString)
+        nCrank=parseFloat(viewString) <!-- This converts the text tnery option for crank length into a float -->
 
         viewInteger=document.ringform.modeval.selectedIndex
         viewString=document.ringform.modeval.options[viewInteger].value
         modename=document.ringform.modeval.options[viewInteger].text
-        nMode=parseFloat(viewString)
-        //tjl
+        nMode=parseFloat(viewString) <!-- This converts the text tnery option for calcualtion mode into a float -->
+
         if(nMode >= 30){
-        mphmult = nMode / 336.135
+        mphmult = nMode / 336.135<!--This number is used when calculating miles per hour at various cadences. . -->
           nMode = 1
         }else{
         mphmult = 1.0
         }
 
+<!-- This selects from the list of cassettes-->
+
         viewInteger=document.ringform.cassette.selectedIndex
         viewString=document.ringform.cassette.options[viewInteger].value
         cassettename=document.ringform.cassette.options[viewInteger].text
         nCassette=viewString
+
+<!--This selects from the list of hubs-->
 
         viewInteger=document.ringform.hubmodel.selectedIndex
         viewString=document.ringform.hubmodel.options[viewInteger].value
@@ -192,6 +226,9 @@
         {
         	nMode=nCrank
         }
+
+<!-- now the main sequence of the program-->
+
         main()
         }
         //----------------------------------------------------------
@@ -227,10 +264,17 @@
         rings = get_rings();
         if((rings[0] == 0) || isNaN(rings[0])) {
         alert("Enter a chainring value!");
-        } else {
+        } else
+
+<!--Here we get to choose between custom and preselected cassettes. First, custom cassettes-->
+		{
         if (nCassette == "Custom") {
         rears = get_rears();
-        } else {
+        } else
+
+<!--Now, preselected cassettes-->
+
+		{
         rears = parse_cassette();
         }
         ringData = calc_rings(rings, rears);
@@ -239,7 +283,7 @@
         showit(ringData);
         }
         }
-        //----------------------------------------------------------
+        //This reads the list of hub ratios
         function parse_hubmodel(){
         temp_hubs = nHub.split("-",18);
         hubs = new Array(temp_hubs.length+1);
@@ -247,7 +291,7 @@
         hubs[temp_hubs.length] = 0;
         return hubs;
         }
-        //----------------------------------------------------------
+        //This reads the list of rear sprocket sizes
         function parse_cassette(){
         temp_rears = nCassette.split("-",18);
         rears = new Array(temp_rears.length+1);
@@ -256,7 +300,7 @@
         return rears;
         }
         //----------------------------------------------------------
-        // **********percentage-rear
+        // **********percentage-rear -- this calculates the percentage incrment between ratios.
         function percentrear(){
         var percentage=1
         percentage=rounder(rears[c+1]/rears[c]*100-100)
@@ -270,7 +314,7 @@
               }
         }
         //----------------------------------------------------------
-        // **********percentage-front
+        // **********percentage-front -- this calculates the percentage incrment between ratios.
         function percentfront1()
         {
         var percentage=1
@@ -285,6 +329,7 @@
                }
         }
         //----------------------------------------------------------
+<!-- -- this calculates the percentage incrment between ratios of the middle and inner chanrings of a triple crankset.
 
         function percentfront2()
         {
@@ -464,76 +509,83 @@ stickerWin.document.write("<BODY>")
         //]]>
         </script>
 
+<!-- Here begins the form "ringfrm" which appears on the Web page for entry of values used in calculation. They are named at the start of each section-->
+
 <form name="ringform" id="ringform">
 	<table class="tgrid">
 		<tr>
-			<th colspan="2">Wheel Size</th>
+
+ <!-- Wheel size has previously been the overall diameter. Diameter will now be calculated from wheelsize (rim diameter) and tirewidth. Values below are rim bead seat diameter-->
+
+			<th colspan="2">Rim Size</th>
 			<th>
 			<select name="diameter" size="1">
-				    <option value="35.65"> 36 x 2.25 / 57-787</option>
-				    <option value="30.94"> 32 x 2.125 / 54/686</option>
-				    <option value="29.90"> 29 x 3.0 / 75-622</option>
-				    <option value="29.54"> 29 x 2.7 / 70-622</option>
-				    <option value="28.94"> 29 x 2.3 / 60-622</option>
-					<option value="29.13"> 700 X 56 / 56-622 / 29 x 2.2 </option>
-				    <option value="29.03"> 29 x 2.1 / 54-622</option>
-					<option value="28.94"> 700 X 50 / 50-622 / 29 x 2.0 </option>
-				    <option value="27.33"> 29 x 1.9 / 47-622</option>
-					<option value="27.86"> 700 X 44 / 44-622 / 29 x 1.75 </option>
-					<option value="27.32"> 700 X 38 / 38-622 </option>
-					<option value="27.17"> 700 X 35 / 35-622 </option>
-					<option value="27"> 700 X 32 / 32-622 </option>
-					<option value="26.38"> 700 X 25 / 25-622 </option>
-					<option value="26.28"> 700 X 23 / 23-622 </option>
-					<option value="26.14"> 700 X 20 / 20-622 </option>
-				<option value="28"> 28 inch (nominal) </option>
-				<option value="28.15"> 28 X 1 1/2 / 40-635 </option>
-				<option value="26.53"> Tubular / Wide </option>
-				<option value="26.38"> Tubular / Narrow </option>
-				<option selected="selected" value="27"> 27 inch (nominal) </option>
-				<option value="27.18"> 27 X 1 3/8 / 35-630 </option>
-				<option value="27.08"> 27 X 1 1/4 / 32-630 </option>
-				<option value="27"> 27 X 1 1/8 / 28-630 </option>
-				<option value="26"> 26 inch (nominal) </option>
-				<option value="26.88"> 27 X 1 / 25-630 </option>
-				<option value="29.97"> 26 x 4.7 / 119-559 fatbike at 10 PSI</option> <!-- calculated from Bruce's easurement-->
-				<option value="29.07"> 26 x 4.25 / 108-559 fatbike at 10 PSI</option> <!-- calculated from Bruce's easurement-->
-				<option value="28.57"> 26 x 4.0 / 102-559 fatbike at 10 PSI</option> <!--measured by Bruce Ingle-->
-				<option value="28.17"> 26 x 3.8 / 97-559 fatbike at 10 PSI</option> <!-- calculated from Bruce's easurement-->
-				<option value="26.41"> 26 X 2.35 / 60-559 / MTB </option>
-				<option value="25.94"> 26 X 2.125 / 54-559 / MTB </option>
-				<option value="25.75"> 26 X 1.9 / 47-559 / MTB </option>
-				<option value="24.87"> 26 X 1.5 / 38-559 / MTB </option>
-				<option value="24.47"> 26 X 1.25 / 32-559 / MTB </option>
-				<option value="23.97"> 26 X 1.0 / 25-559 / MTB </option>
-				<option value="28.68"> 650B (“27.5”) x 3.0 / 76-584 / MTB</option>
-				<option value="28.48"> 650B (“27.5”) x 2.8 / 71-584 / MTB</option>
-				<option value="28.18"> 650B (“27.5”) x 2.5 / 64-584 / MTB</option>
-				<option value="27.68"> 650B (“27.5”) x 2.0 / 51-584 / MTB</option>
-                <option value="26.00"> 650 x 38B / 38-584 / 650B </option>
-				<option value="24.70"> 650 x 28C / 28-571 / 26" road/tri </option>
-				<option value="24.46"> 650 x 25C / 25-571 / 26" road/tri </option>
-				<option value="24.31"> 650 x 23C / 23-571 / 26" road/tri </option>
-				<option value="25.91"> 26 X 1 3/8 / 35-590 </option>
-				<option value="24"> 24" (nominal) </option>
-				<option value="21.97"> 24 x 1 / 25-520 </option>
-				<option value="24.35"> 24 x 2.5 / 65-507 </option>
-				<option value="24.15"> 24 x 2/3 / 60-507 </option>
-				<option value="23.95"> 24 x 2.1 / 54-507 </option>
-				<option value="20.15"> 32-451 /20 x 1 3/8 </option>
-				<option value="19.90"> 28-451/20 x 1 1/8 </option>
-				<option value="18.68"> 20 X 1.75 / 44-406 / BMX </option>
-				<option value="18.43"> 20 X 1.25 / 32-406 </option>
-				<option value="17.16"> 18 x 1.5 / 40-355 </option>
-				<option value="16.60"> 17 x 1 1/4 / 32-369 </option>
-				<option value="16.88"> 16 x 1 1/2 / 40-349 </option>
-				<option value="16.07"> 16 x 1 3/8 / 35-349 </option>
-				<option value="14.92"> 16 x 1.5 / 37-305 </option>
+				<option value="30.98"> 787: 36 in/</option>
+				<option value="27.01"> 686: 32 in</option>
+               			<option value="25.28"> 642: 700A</option>
+				<option value="25.00"> 635: 28 X 1 1/2,  700 B, 28 x 1 5/8 x 1 1/2 (Sweden)</option>
+				<option value="24.80"> 630: 27 x anything except "27 five" and 609 mm</option>
+				<option value="24.49"> 622: "29 inch", "28 x...", 28 x 1 1/2 F.13 Canada</option>
+				<option value="23.98"> 609: Rare Danish size, 27 x 1 1/2</option>
+				<option value="23.58"> 599: 26 x 1.25, x 1.375 -- old US size</option>
+				<option value="23.50"> 597: 26 x 1 1/4, 26 x 1 3/8 (S-6)</option>
+				<option value="23.23"> 590: 26 x 1 3/8 (E.A.3), 650 A</option>
+				<option value="22.99"> 584: 650B, 26 x 1 1/2, "27 five"</option>
+				<option value="22.95"> 583: 700 D -- oddball size made by GT</option>
+				<option value="22.48"> 571: 26 x 1, 26 x 1 3/4, 650 C</option>
+				<option value="22.01"> 559: 26 x 1.00- x 2.125, fatbike tires up to 5 inches wide</option>
+				<option value="21.54"> 547: 24 x 1 1/4, 24 x 1 3/8 (S-5)</option>
+				<option value="21.30"> 541: 600 A</option>
+				<option value="21.26"> 540: 24 x 1 1/8, 24 x 1 3/8 (E.5),</option>
+				<option value="21.02"> 534: Dutch 24 x 1.5</option>
+				<option value="20.47"> 520: 24 x 1, 24 x 1 1/8, 24 x 1 3/8, 24 x 1 3/4</option>
+				<option value="19.96"> 507: 24 x 1.5- x 2.125</option>
+				<option value="19.72"> 501: British, 22 x 1 3/8, 22 x 1.00</option>
+				<option value="19.29"> 490: 550 A</option>
+				<option value="19.25"> 489: Dutch juvenile 22 x 1 1/8 NL, 22 x 1 3/8 NL</option>
+				<option value="19.06"> 484: 550 B</option>
+				<option value="17.99"> 457: 22 x 1.75; x 2.1, x 2.125, x 2.3, x 2.4</option>
+				<option value="17.76"> 451: 20 x 1 1/8; x 1 1/4; x 1 3/8; OS20 x 1.6, 1.75, 1.85</option>
+				<option value="17.32"> 440: 500 A</option>
+				<option value="15.75"> 400: 18 x 1 3/8, 18 x 1</option>
+				<option value="17.24"> 438: Dutch juvenile, 20 x 1 3/8 NL</option>
+				<option value="16.85"> 428: Swedish, 20 x 2</option>
+				<option value="16.50"> 419: 20 x 1 3/4 Schwinn Juven</option>
+				<option value="15.98"> 406: 20 x 1.5- x 2.125</option>
+				<option value="15.75"> 400: 18 x 1</option>
+				<option value="15.35"> 390: 450 A</option>
+				<option value="14.53"> 369: 17 x 1 1/4</option>
+				<option value="13.98"> 355: 18 x 1.5- x 2.125</option>
+				<option value="13.74"> 349: 16 x 1 3/8</option>
+				<option value="13.39"> 340: 400 A</option>
+				<option value="13.27"> 337: 16 x 1 3/8</option>
+				<option value="13.19"> 335: 16x 1 3/8 Polish juvenile</option>
+				<option value="12.48"> 317: 16 x 1 3/4</option>
+				<option value="12.01"> 305: 16 x 1.75- x 2.125</option>
+				<option value="11.73"> 298: 14 x 1 3/8, Moulton Mini</option>
+				<option value="11.34"> 288: 350 A</option>
+				<option value="10.00"> 254: 14 x 1.75</option>
+				<option value="9.92"> 252: 12 x 1/5/8 (France). 254 will work - build up rim with tape.</option>
+				<option value="7.99"> 203: 12 1/2 X anything.</option>
+				<option value="5.98"> 152: 10 x 2</option>
+				<option value="5.39"> 137: 8 x 1 1/4</option>
 			</select>
 
 <!-- .6366    165 / 25.4 12.7 added sizes 8/31/02-->
 			</th>
 		</tr>
+
+<!--Tire width line goes here and is only one entry. This could go on the same line with rim size by reformatting into two columns. As the values do not overlap -- 0.75=4 inches, 19=125 mm, both oud be entered in the same field in the form and a multiplier used as needed. .-->
+
+	     <tr>
+			<th>Tire width<br />
+			in mm</th>
+			<th>
+			<input type="text" name="nWidth" size="2" />
+			</th>
+		</tr>
+
+
 		<tr>
 			<th colspan="2">Crank Length</th>
 			<th>
@@ -568,6 +620,9 @@ stickerWin.document.write("<BODY>")
 			</select>
 			</th>
 		</tr>
+
+ <!-- Gear units are used to select the different ways of measuring gearing -->
+
 		<tr>
 			<th colspan="2">Gear units</th>
 			<th>
@@ -590,6 +645,9 @@ stickerWin.document.write("<BODY>")
 			</select>
 			</th>
 		</tr>
+
+ <!-- there can be up to three chainrings. Note that each can have up to two digits and the values are initially empty.-->
+
 		<tr>
 			<th colspan="2">Chainring(s)</th>
 			<th>
@@ -598,6 +656,9 @@ stickerWin.document.write("<BODY>")
 			<input type="text" name="ring3" size="2" value="" />
 			</th>
 		</tr>
+
+<!-- The options below are to enter cassettes. Note that the first options is for custom xprockets and refers to the second list below.-->
+
 		<tr>
 			<th rowspan="2" style="vertical-align:middle;">or</th>
 			<th>Cassette</th>
@@ -799,6 +860,9 @@ stickerWin.document.write("<BODY>")
 				<option value="14-16-18-20-22-24-28"> SunRace 14-16-18-20-22-24-28 7-speed Freewheel</option>			</select>
 			</th>
 		</tr>
+
+<!--This next section is for the line to enter one to 13 sprocket sizes manually.  -->
+
 		<tr>
 			<th>Custom Sprocket(s)<br />
 			(1 or more)</th>
@@ -818,6 +882,9 @@ stickerWin.document.write("<BODY>")
 			<input type="text" name="rear13" size="2" />
 			</th>
 		</tr>
+
+<!-- Now display internal-gear hub names and enter internal-gear hub ratios-->
+
 		<tr>
 			<th colspan="2">Internal Hub</th>
 			<th>
@@ -952,7 +1019,7 @@ stickerWin.document.write("<BODY>")
 			</th>
 		</tr>
 	</table>
-</form>
+</form> <!-- end of the form which appears on the Web page.-->
 <p class="center">
 	<img alt="Spoke Divider" src="https://www.sheldonbrown.com/images/spokeflop.gif" width="559" height="12" />
 </p>
@@ -1048,7 +1115,7 @@ stickerWin.document.write("<BODY>")
 		Jake Odell has a more elaborate gear calculator:
 	    </h4>
 	<h3 class="center">
-		<a href="http://cycletech.us/">HPV Drivetrain Analyzer</a> (It's back from the rubble of a lightning-struck server, true story. Jake Odell, thanks!)
+		<a href="https://web.archive.org/web/20170505165637/http://www.soulbikes.com/gears/">HPV Drivetrain Analyzer</a> (note -- the page is available in the Internat archive but the calculator doesn't work).
 	</h3>
 	<h4 class="center">
 		Tom Kunicki has a calculator with specific features useful for fixed-gear and singlespeed riders:
