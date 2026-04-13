@@ -7,7 +7,13 @@
 	<title>Sheldon Brown's Bicycle Gear Calculator</title>
     <meta name="description" content="A JavaScript calculator for analyzing bicycle gearing" />
     <meta name="keywords" content="gear, inch, gain ,ratio, gear inch, gearinch, gain ratio, Gain, bicycle, sprocket, chainwheel, development, developement, meters, metric, calculate,calculator,calculation, internal gear, internal-gear, Sturmey-Archer, SRAM, Sachs, Fichtel, Shimano, freewheel, cassette, sheldon,brown,capt,bike,captbike,captain,bike,stephen,cohen,timothy,lipetz,harris,cyclery" />
-	
+
+    <link rel="stylesheet" type="text/css" href="https://www.sheldonbrown.com/common-data/document.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="https://www.sheldonbrown.com/common-data/screen.css" />
+    <link rel="stylesheet" type="text/css" media="print" href="https://www.sheldonbrown.com/common-data/print.css" />
+    <link rel="stylesheet" type="text/css" href="common-data/document.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="common-data/screen.css" />
+    <link rel="stylesheet" type="text/css" media="print"href="common-data/print.css" />
 <!--#include file="_includes/common/harrisLogo-head.html" -->
 
 <style type="text/css">
@@ -37,7 +43,7 @@
 	<div id="articletitle">
 		Sheldon Brown's<br>
     Derailer Gear/Internal-Gear Calculator </div>
-	
+
 <table class="plain" style="width:100%;">
 <tr>
 <td style="width:40%;">
@@ -50,16 +56,16 @@
 </td>
 <td style="width:30%;">
 <!--#include file="_includes/common/buttons.html" -->
-</td>  
+</td>
 </tr>
 </table>
 
-<a href="https://www.sheldonbrown.com/eagle.html"><img alt="Sheldon Brown photo" src="https://www.sheldonbrown.com/images/scb_eagle_contact.jpeg" height="108" width="72" /></a> 
+<a href="https://www.sheldonbrown.com/eagle.html"><img alt="Sheldon Brown photo" src="https://www.sheldonbrown.com/images/scb_eagle_contact.jpeg" height="108" width="72" /></a>
 <!-- XXXXX -->
 	<div id="byline">
-		by <a href="https://www.sheldonbrown.com/home.html">Sheldon "Gain Ratio" Brown</a> 
+		by <a href="https://www.sheldonbrown.com/home.html">Sheldon "Gain Ratio" Brown</a>
 	</div>
-	<img alt="Spoke Divider" src="https://www.sheldonbrown.com/images/spokeflop.gif" width="559" height="12" /> 
+	<img alt="Spoke Divider" src="https://www.sheldonbrown.com/images/spokeflop.gif" width="559" height="12" />
 </div>
 
 <!-- Text part 1 -->
@@ -70,7 +76,7 @@
         Fichtel &amp; Sachs, Sachs and SRAM are the same series of hubs, shown together.<br />
         This page covers most internal hubs back to the original 1902 Sturmey-Archer.<br />
         <a href="https://www.sheldonbrown.com/internal-gears.html">Many  internal-gear hubs</a> listed and <a href="https://www.sheldonbrown.com/harris/k7.html">some of the cassettes</a> are no longer in production.<br />
-       
+
 </p>
         <p class="bold">Clicking on &quot;calculate&quot; generates two new output pages: a full-size one, and a small one which you might print out and tape to your bicycle's handlebar stem for reference. The small one will overlay the large one in a browser which supports tabs.</p>
 <p class="bold"> If you do a calculation,  then bring those  to the front, subsequent "results" windows from subsequent calculations may be hidden behind them. </p>
@@ -80,14 +86,14 @@
 <p>Peter Heinle has <a href="http://photos.airpost.net/cycling/bicycle-cassette-cogs.xls" target="_blank">an Excel spreadsheet</a> online with the tooth counts of a large number of 10-through 13-speed cassettes</p>
   <script>
 //<![CDATA[
-        <!-- Declare variables -->
+        <!--
         //----------------------------------------------------------
         var nWheel=1
         // was 0
         var modeval=1
         //modeval is 1 for gear inches, 12.532 for meters, crank _diam._ for gain ratio
         //this currently is not working
-        var cassette=1 
+        var cassette=1
 
         // tjl
         // Extra multiplier for MPH data - based on GearInches
@@ -100,24 +106,18 @@
 
         //----------------------------------------------------------
 
-<!-- This enters the chainwheel sizes into the calculation-->
-
         function get_rings()
         {
-        rings = new Array
-		            (parseFloat(document.ringform.ring1.value),
-                     parseFloat(document.ringform.ring2.value),
-                     parseFloat(document.ringform.ring3.value),
-					 0);
+        rings = new Array(parseFloat(document.ringform.ring1.value),
+                    parseFloat(document.ringform.ring2.value),
+                    parseFloat(document.ringform.ring3.value),
+                    0);
         return rings;
         }
 
-<!-- this enters the sprockets into the calculator -->
-
         function get_rears()
         {
-        rears = new Array
-		           (parseFloat(document.ringform.rear1.value),
+        rears = new Array(parseFloat(document.ringform.rear1.value),
                     parseFloat(document.ringform.rear2.value),
                     parseFloat(document.ringform.rear3.value),
                     parseFloat(document.ringform.rear4.value),
@@ -137,82 +137,54 @@
         //----------------------------------------------------------
 
         function calc_rings(rings, rears)
-
-<!-- parsefloat converts text to floats, All data used in calculation is entered as text and ocnverted to floats --> 
- 
         {
-        wheelval=parseFloat(nWheel);   
+        wheelval=parseFloat(nWheel);
 
         ringData = new Array(5);
-        for (n=0; rings[n]>0; n++) { <!-- Chainrings, lines in array -->
+        for (n=0; rings[n]>0; n++) {
         ringData[n] = new Array(15);
-        for (c=0; rears[c]>0; c++) {   <!--Sprockets, columns in array-->
-
-<!-- Following is the actual calculation of drive ratio for each item in the two-dimensional array -->
-
+        for (c=0; rears[c]>0; c++) {
         ringData[n][c]=mphmult*(rings[n]/rears[c])*wheelval/nMode;
-		
-<!-- To separate the tire width from the rim diameter, ccange this to something like this. 25.4 converts to inches-->	
-
-<!--    ringData[n][c]=mphmult*(rings[n]/rears[c])*(wheelval+ 2 * tirewidth)0/(25.4*nMod)e;	
-		
-		
         // tjl - Do rounding at printout instead - ringData[n][c]=rounder(mphmult*(rings[n]/rears[c])*wheelval/nMode);
-        }  
+        }
         }
         return ringData;
         }
 
         //----------------------------------------------------------
 
-<!-- nWheel will now be only rim diameter-->
-
         function converter()
-        {       
-        var viewInteger, viewString   <!-- declare vairables-->
-		
-        viewInteger=document.ringform.diameter.selectedIndex      
-        viewString=document.ringform.diameter.options[viewInteger].value  
-        tiresize=document.ringform.diameter.options[viewInteger].text        
-        nWheel=parseFloat(viewString) <!-- This converts the text entry option for wheel diameter into a float -->
+        {
+        var viewInteger, viewString
+        viewInteger=document.ringform.diameter.selectedIndex
+        viewString=document.ringform.diameter.options[viewInteger].value
+        tiresize=document.ringform.diameter.options[viewInteger].text
+        nWheel=parseFloat(viewString)
 
-<!--following four lines are new and are to enter tire width-->
+        viewInteger=document.ringform.crankdiam.selectedIndex
+        viewString=document.ringform.crankdiam.options[viewInteger].value
+        cranklength=document.ringform.crankdiam.options[viewInteger].text
+        nCrank=parseFloat(viewString)
 
-<!--        viewInteger=document.ringform.tirewidth.selectedIndex      
-<!--        viewString=document.ringform.tirewidth.options[viewInteger].value  
-<!--        tiresize=document.ringform.tirewidth.options[viewInteger].text        
-<!--        nWidth=parseFloat(viewString) <!-- This converts the text entry option (in mm) for tire width into a float.-->
-		
-<!--End of new section-->		
-
-        viewInteger=document.ringform.crankdiam.selectedIndex      
-        viewString=document.ringform.crankdiam.options[viewInteger].value  
-        cranklength=document.ringform.crankdiam.options[viewInteger].text        
-        nCrank=parseFloat(viewString) <!-- This converts the text tnery option for crank length into a float -->
-
-        viewInteger=document.ringform.modeval.selectedIndex      
-        viewString=document.ringform.modeval.options[viewInteger].value  
-        modename=document.ringform.modeval.options[viewInteger].text        
-        nMode=parseFloat(viewString) <!-- This converts the text tnery option for calcualtion mode into a float -->
-        
+        viewInteger=document.ringform.modeval.selectedIndex
+        viewString=document.ringform.modeval.options[viewInteger].value
+        modename=document.ringform.modeval.options[viewInteger].text
+        nMode=parseFloat(viewString)
+        //tjl
         if(nMode >= 30){
-        mphmult = nMode / 336.135<!--This number is used when calculating miles per hour at various cadences. . -->
+        mphmult = nMode / 336.135
           nMode = 1
         }else{
         mphmult = 1.0
         }
-		
-<!-- This selects from the list of cassettes-->		
 
-        viewInteger=document.ringform.cassette.selectedIndex      
-        viewString=document.ringform.cassette.options[viewInteger].value  
-        cassettename=document.ringform.cassette.options[viewInteger].text        
+        viewInteger=document.ringform.cassette.selectedIndex
+        viewString=document.ringform.cassette.options[viewInteger].value
+        cassettename=document.ringform.cassette.options[viewInteger].text
         nCassette=viewString
-		
-<!--This selects from the list of hubs-->		
 
-        viewInteger=document.ringform.hubmodel.selectedIndex      
-        viewString=document.ringform.hubmodel.options[viewInteger].value  
+        viewInteger=document.ringform.hubmodel.selectedIndex
+        viewString=document.ringform.hubmodel.options[viewInteger].value
         hubname=document.ringform.hubmodel.options[viewInteger].text
         nHub = viewString
 
@@ -220,15 +192,12 @@
         {
         	nMode=nCrank
         }
-		
-<!-- now the main sequence of the program-->		
-		
         main()
         }
         //----------------------------------------------------------
         //
         // This function rounds the passed number to one decimal place
-        // and returns it as a string.  
+        // and returns it as a string.
         //
         // Future Enhancement: It should probably check to make sure that
         // the variable passed in *is* a number.
@@ -258,26 +227,19 @@
         rings = get_rings();
         if((rings[0] == 0) || isNaN(rings[0])) {
         alert("Enter a chainring value!");
-        } else 
-		
-<!--Here we get to choose between custom and preselected cassettes. First, custom cassettes-->
-		{ 
+        } else {
         if (nCassette == "Custom") {
         rears = get_rears();
-        } else 
-	
-<!--Now, preselected cassettes-->		
-		
-		{
+        } else {
         rears = parse_cassette();
         }
-        ringData = calc_rings(rings, rears);    
+        ringData = calc_rings(rings, rears);
         hubMult = parse_hubmodel(nHub)
-        numHubs = hubMult.length - 1 
+        numHubs = hubMult.length - 1
         showit(ringData);
-        }  
         }
-        //This reads the list of hub ratios
+        }
+        //----------------------------------------------------------
         function parse_hubmodel(){
         temp_hubs = nHub.split("-",18);
         hubs = new Array(temp_hubs.length+1);
@@ -285,7 +247,7 @@
         hubs[temp_hubs.length] = 0;
         return hubs;
         }
-        //This reads the list of rear sprocket sizes
+        //----------------------------------------------------------
         function parse_cassette(){
         temp_rears = nCassette.split("-",18);
         rears = new Array(temp_rears.length+1);
@@ -294,59 +256,58 @@
         return rears;
         }
         //----------------------------------------------------------
-        // **********percentage-rear -- this calculates the percentage incrment between ratios.
+        // **********percentage-rear
         function percentrear(){
-        var percentage=1   
+        var percentage=1
         percentage=rounder(rears[c+1]/rears[c]*100-100)
         if (rears[c]>rears[c+1])
               {
               percentage=rounder(rears[c]/rears[c+1]*100-100)
               }
         if (rears[c+1]>0)
-              {      
-              gearwin.document.write("<TR><TD align=center ><FONT SIZE=-1>"+percentage+" %<\/FONT>"); 
+              {
+              gearwin.document.write("<TR><TD align=center ><FONT SIZE=-1>"+percentage+" %<\/FONT>");
               }
         }
         //----------------------------------------------------------
-        // **********percentage-front -- this calculates the percentage incrment between ratios.
+        // **********percentage-front
         function percentfront1()
         {
-        var percentage=1   
+        var percentage=1
         percentage=rounder(rings[0]/rings[1]*100-100)
         if (rings[0]<rings[1])
               {
               percentage=rounder(rings[1]/rings[0]*100-100)
               }
         if (rings[1]>0)
-               {      
-              gearwin.document.write("<TD align=center width=12%><FONT SIZE=-1>"+percentage+" %<\/FONT><\/TD>"); 
+               {
+              gearwin.document.write("<TD align=center width=12%><FONT SIZE=-1>"+percentage+" %<\/FONT><\/TD>");
                }
         }
         //----------------------------------------------------------
-<!-- -- this calculates the percentage incrment between ratios of the middle and inner chanrings of a triple crankset.
 
         function percentfront2()
         {
-        var percentage=1   
+        var percentage=1
         percentage=rounder(rings[1]/rings[2]*100-100)
         if (rings[1]<rings[2])
               {
               percentage=rounder(rings[2]/rings[1]*100-100)
               }
         if (rings[2]>0)
-               {      
-              gearwin.document.write("<TD align=center width=12%><FONT SIZE=-1>"+percentage+" %<\/FONT><\/TD>"); 
+               {
+              gearwin.document.write("<TD align=center width=12%><FONT SIZE=-1>"+percentage+" %<\/FONT><\/TD>");
                }
         }
         //----------------------------------------------------------
         // **********output-big
         function showit(ringData)
-        {   
-        //  gearwin=open("format.html","secwin","width=400,height=450,toolbar=no,scrollbars=yes,menubar");    
+        {
+        //  gearwin=open("format.html","secwin","width=400,height=450,toolbar=no,scrollbars=yes,menubar");
         gearwin=open("","secwin");
         gearwin.document.write("<!DOCTYPE html><head>")
 		gearwin.document.write("<title>Sheldon Brown's Bicycle Gear Calculator Table</title>")
-		gearwin.document.write("</head>")   
+		gearwin.document.write("</head>")
         gearwin.document.write("<BODY background=sheldonbrown.com/images/beige.gif>")
         gearwin.document.write("<FORM><H3> <\/H3><br><br>")
         //tjl
@@ -356,22 +317,22 @@
         gearwin.document.write("<CENTER><H2>Gear chart using <A HREF=https://www.sheldonbrown.com/gloss_g.html#gearinch>Gear Inches<\/A><\/H2><\/CENTER>")
         else if (nMode==12.532)
         gearwin.document.write("<CENTER><H2>Gear chart using <A HREF=https://www.sheldonbrown.com/gloss_da-o.html#development>Meters Development<\/A><\/H2><\/CENTER>")
-        else 
+        else
         gearwin.document.write("<CENTER><H2>Gear chart using <A HREF=https://www.sheldonbrown.com/gain.html>Gain Ratios<\/A><\/H2><\/CENTER>")
 
-        gearwin.document.write("<CENTER><i><h3>For "+tiresize+" tire with "+cranklength+" cranks<\/h3><\/i><\/CENTER>") 
+        gearwin.document.write("<CENTER><i><h3>For "+tiresize+" tire with "+cranklength+" cranks<\/h3><\/i><\/CENTER>")
 
 // modified by Harriet Fell 1/2016 to show "Custom Sprocket(s)" or named casette
 		if(cassettename=="Custom Sprocket(s)"){
-			gearwin.document.write("<CENTER><i><H3>With custom sprocket(s)"+"<\/H3><\/i>") 
+			gearwin.document.write("<CENTER><i><H3>With custom sprocket(s)"+"<\/H3><\/i>")
 		}
 		else
 		{
-				gearwin.document.write("<CENTER><i><H3>With " +cassettename+ " Cassette<\/H3><\/i>") 
+				gearwin.document.write("<CENTER><i><H3>With " +cassettename+ " Cassette<\/H3><\/i>")
 		}
 
 // modified by Harriet Fell 1/2016 to not say "Rear Hub" for a bracket
-    	if(numHubs > 1){ 
+    	if(numHubs > 1){
 			if(hubname.indexOf("bracket") > -1) {
 				gearwin.document.write("<CENTER><i><H3>With " +hubname+ "<\/H3><\/i>")
 			}
@@ -384,26 +345,26 @@
         if(numHubs > 1){
         for(hub=numHubs-1; hub>=0; hub--) {
         // tjl - first label tables (if more than one)
-        if(hub == 0){  
+        if(hub == 0){
         gearwin.document.write("<TH bgcolor=yellow><font color=red>"+rounder2(hubMult[hub])+"   (High)<\/font><\/TH>");
-        }else if(hub == (numHubs-1)){  
+        }else if(hub == (numHubs-1)){
         gearwin.document.write("<TH bgcolor=yellow><font color=red>"+rounder2(hubMult[hub])+"   (Low)<\/font><\/TH>");
         }else{
-        gearwin.document.write("<TH bgcolor=yellow><font color=red>"+rounder2(hubMult[hub])+"<\/TH>");  
+        gearwin.document.write("<TH bgcolor=yellow><font color=red>"+rounder2(hubMult[hub])+"<\/TH>");
         }
-        } 
+        }
         gearwin.document.write("<\/TR><TR>");
-        } 
+        }
         for(hub=numHubs-1; hub>=0; hub--) {
         gearwin.document.write("<TD><CENTER><TABLE border=1 cellpadding=2><TR align=center  ><TD><\/TD> <TH bgcolor=yellow ><font color=red>"+rings[0]+"<\/font><\/TH>");
         // **********  header of output
         if(rings[1]>0)
         {
-        percentfront1()   
+        percentfront1()
         gearwin.document.write("<TH bgcolor=yellow><font color=red>"+rings[1]+"<\/font><\/TH>");
         if(rings[2]>0)
           {
-          percentfront2()   
+          percentfront2()
           gearwin.document.write("<TH bgcolor=yellow ><font color=red>"+rings[2]+"<\/font><\/TH>");
           }
         }
@@ -411,17 +372,17 @@
         // ******** loop to calculate gears for each sprocket
         for (c=0; rears[c]>0; c++)
         {
-        gearwin.document.write("<TR><TH bgcolor=yellow><FONT COLOR=RED>"+rears[c]+"<\/FONT><\/TH><TH bgcolor=white>"+rounder(hubMult[hub]*ringData[0][c])+"<\/TH>");      
+        gearwin.document.write("<TR><TH bgcolor=yellow><FONT COLOR=RED>"+rears[c]+"<\/FONT><\/TH><TH bgcolor=white>"+rounder(hubMult[hub]*ringData[0][c])+"<\/TH>");
         if (rings[1]>0)
         {
-           gearwin.document.write("<TD><\/TD><TH bgcolor=white>"+rounder(hubMult[hub]*ringData[1][c])+"<\/TH>");         
+           gearwin.document.write("<TD><\/TD><TH bgcolor=white>"+rounder(hubMult[hub]*ringData[1][c])+"<\/TH>");
            if (rings[2]>0)
               {
-              gearwin.document.write("<TD><\/TD><TH bgcolor=white>"+rounder(hubMult[hub]*ringData[2][c])+"<\/TH>")  
-              }          
+              gearwin.document.write("<TD><\/TD><TH bgcolor=white>"+rounder(hubMult[hub]*ringData[2][c])+"<\/TH>")
+              }
         }
         gearwin.document.write("<\/TR>")
-        percentrear()   
+        percentrear()
         }
         gearwin.document.write("<\/TABLE>")
 
@@ -429,7 +390,7 @@
         // end first big table
         gearwin.document.write("<\/TD>")
         }
-        gearwin.document.write("<\/TR><\/TABLE>") 
+        gearwin.document.write("<\/TR><\/TABLE>")
 
 stickerWin= window.open("");
 stickerWin.document.write("<!DOCTYPE html><head>")
@@ -440,48 +401,48 @@ stickerWin.document.write("<BODY>")
         stickerWin.document.write("<CENTER><P>This small version of the chart can be printed, cut out, and taped to your bicycle for reference.<P>");
 
         // tjl - another big loop for a row of tables for the stickers
-//***	
+//***
         stickerWin.document.write("<CENTER><TABLE border=1 cellpadding=0 id='stickerTable'><TR>")
         if(numHubs > 1){
         for(hub=numHubs-1; hub>=0; hub--) {
         // tjl - first label tables (if more than one)
-        if(hub == 0){  
+        if(hub == 0){
         stickerWin.document.write("<TH><font size=-1>High<\/font><\/TH>");
-        }else if(hub == (numHubs-1)){  
+        }else if(hub == (numHubs-1)){
         stickerWin.document.write("<TH><font size=-1>Low<\/font><\/TH>");
         }else{
-        stickerWin.document.write("<TH>-<\/TH>");  
+        stickerWin.document.write("<TH>-<\/TH>");
         }
-        } 
+        }
         stickerWin.document.write("<\/TR><TR>");
-        } 
+        }
         for(hub=numHubs-1; hub>=0; hub--) {
         // ******** loop to calculate sticker
         stickerWin.document.write("<TD><TABLE border cellpadding=0 bgcolor=white>");
         for (c=0; rears[c]>0; c++)
         {
-         stickerWin.document.write("<TR><TH><font size=-1>"+rounder(hubMult[hub]*ringData[0][c])+"<\/font><\/TH>");      
+         stickerWin.document.write("<TR><TH><font size=-1>"+rounder(hubMult[hub]*ringData[0][c])+"<\/font><\/TH>");
          if(rings[1]>0)
         {
-           stickerWin.document.write("<TH><font size=-1>"+rounder(hubMult[hub]*ringData[1][c])+"<\/font><\/TH>");         
+           stickerWin.document.write("<TH><font size=-1>"+rounder(hubMult[hub]*ringData[1][c])+"<\/font><\/TH>");
            if(rings[2]>0)
-              stickerWin.document.write("<TH><font size=-1>"+rounder(hubMult[hub]*ringData[2][c])+"<\/font><\/TH>")            
+              stickerWin.document.write("<TH><font size=-1>"+rounder(hubMult[hub]*ringData[2][c])+"<\/font><\/TH>")
          }
-        stickerWin.document.write("<\/TR>")   
+        stickerWin.document.write("<\/TR>")
         }
         stickerWin.document.write("<\/TABLE>")
 
         //tjl
-        stickerWin.document.write("<\/TD>") 
+        stickerWin.document.write("<\/TD>")
         }
         stickerWin.document.write("<\/TR><\/TABLE>")
-		
+
         //tjl
     // gearwin.document.write("<P><INPUT TYPE=button VALUE=PRINT onClick=print(this.form)>")
     //  gearwin.document.write("<INPUT TYPE=button VALUE=PRINT onClick=window.print(this)>")
     //   gearwin.document.write("<INPUT TYPE=button VALUE=CLOSE onClick=window.close(this)>")
 	//    gearwin.document.write("<H3>Note: This is under construction, and the print function does not yet work.<\/H3>")
-	
+
 	stickerWin.document.write("<INPUT TYPE=button VALUE=PRINT onClick=window.print(this)>")
 	stickerWin.document.write("<\/BODY>")
     stickerWin.document.write("<\/HTML>")
@@ -497,89 +458,82 @@ stickerWin.document.write("<BODY>")
         gearwin.document.write("<\/HTML>")
         gearwin.document.close ();
 
-        //<\/CENTER><hr><br>If Print option does not work, press Stop.")  
+        //<\/CENTER><hr><br>If Print option does not work, press Stop.")
         }
         // -->
         //]]>
         </script>
-        
-<!-- Here begins the form "ringfrm" which appears on the Web page for entry of values used in calculation. They are named at the start of each section-->        
 
 <form name="ringform" id="ringform">
 	<table class="tgrid">
 		<tr>
-        
- <!-- Wheel size has previously been the overall diameter. Diameter will now be calculated from wheelsize (rim diameter) and tirewidth. Values below are rim bead seat diameter-->
-        
-			<th colspan="2">Rim Size</th>
-			<th> 
+			<th colspan="2">Wheel Size</th>
+			<th>
 			<select name="diameter" size="1">
-				<option value="30.98"> 787: 36 in/</option>
-				<option value="27.01"> 686: 32 in</option>
-               			<option value="25.28"> 642: 700A</option>
-				<option value="25.00"> 635: 28 X 1 1/2,  700 B, 28 x 1 5/8 x 1 1/2 (Sweden)</option>
-				<option value="24.80"> 630: 27 x anything except "27 five" and 609 mm</option>
-				<option value="24.49"> 622: "29 inch", "28 x...", 28 x 1 1/2 F.13 Canada</option>
-				<option value="23.98"> 609: Rare Danish size, 27 x 1 1/2</option>
-				<option value="23.58"> 599: 26 x 1.25, x 1.375 -- old US size</option>
-				<option value="23.50"> 597: 26 x 1 1/4, 26 x 1 3/8 (S-6)</option>
-				<option value="23.23"> 590: 26 x 1 3/8 (E.A.3), 650 A</option>
-				<option value="22.99"> 584: 650B, 26 x 1 1/2, "27 five"</option>
-				<option value="22.95"> 583: 700 D -- oddball size made by GT</option>
-				<option value="22.48"> 571: 26 x 1, 26 x 1 3/4, 650 C</option>
-				<option value="22.01"> 559: 26 x 1.00- x 2.125, fatbike tires up to 5 inches wide</option>
-				<option value="21.54"> 547: 24 x 1 1/4, 24 x 1 3/8 (S-5)</option>
-				<option value="21.30"> 541: 600 A</option>
-				<option value="21.26"> 540: 24 x 1 1/8, 24 x 1 3/8 (E.5),</option>
-				<option value="21.02"> 534: Dutch 24 x 1.5</option>
-				<option value="20.47"> 520: 24 x 1, 24 x 1 1/8, 24 x 1 3/8, 24 x 1 3/4</option>
-				<option value="19.96"> 507: 24 x 1.5- x 2.125</option>
-				<option value="19.72"> 501: British, 22 x 1 3/8, 22 x 1.00</option>
-				<option value="19.29"> 490: 550 A</option>
-				<option value="19.25"> 489: Dutch juvenile 22 x 1 1/8 NL, 22 x 1 3/8 NL</option>
-				<option value="19.06"> 484: 550 B</option>
-				<option value="17.99"> 457: 22 x 1.75; x 2.1, x 2.125, x 2.3, x 2.4</option>
-				<option value="17.76"> 451: 20 x 1 1/8; x 1 1/4; x 1 3/8; OS20 x 1.6, 1.75, 1.85</option>
-				<option value="17.32"> 440: 500 A</option>
-				<option value="15.75"> 400: 18 x 1 3/8, 18 x 1</option>
-				<option value="17.24"> 438: Dutch juvenile, 20 x 1 3/8 NL</option>
-				<option value="16.85"> 428: Swedish, 20 x 2</option>
-				<option value="16.50"> 419: 20 x 1 3/4 Schwinn Juven</option>
-				<option value="15.98"> 406: 20 x 1.5- x 2.125</option>
-				<option value="15.75"> 400: 18 x 1</option>
-				<option value="15.35"> 390: 450 A</option>
-				<option value="14.53"> 369: 17 x 1 1/4</option>
-				<option value="13.98"> 355: 18 x 1.5- x 2.125</option>
-				<option value="13.74"> 349: 16 x 1 3/8</option>
-				<option value="13.39"> 340: 400 A</option>
-				<option value="13.27"> 337: 16 x 1 3/8</option>
-				<option value="13.19"> 335: 16x 1 3/8 Polish juvenile</option>
-				<option value="12.48"> 317: 16 x 1 3/4</option>
-				<option value="12.01"> 305: 16 x 1.75- x 2.125</option>
-				<option value="11.73"> 298: 14 x 1 3/8, Moulton Mini</option>
-				<option value="11.34"> 288: 350 A</option>
-				<option value="10.00"> 254: 14 x 1.75</option>
-				<option value="9.92"> 252: 12 x 1/5/8 (France). 254 will work - build up rim with tape.</option>
-				<option value="7.99"> 203: 12 1/2 X anything.</option>
-				<option value="5.98"> 152: 10 x 2</option>
-				<option value="5.39"> 137: 8 x 1 1/4</option>
+				    <option value="35.65"> 36 x 2.25 / 57-787</option>
+				    <option value="30.94"> 32 x 2.125 / 54/686</option>
+				    <option value="29.90"> 29 x 3.0 / 75-622</option>
+				    <option value="29.54"> 29 x 2.7 / 70-622</option>
+				    <option value="28.94"> 29 x 2.3 / 60-622</option>
+					<option value="29.13"> 700 X 56 / 56-622 / 29 x 2.2 </option>
+				    <option value="29.03"> 29 x 2.1 / 54-622</option>
+					<option value="28.94"> 700 X 50 / 50-622 / 29 x 2.0 </option>
+				    <option value="27.33"> 29 x 1.9 / 47-622</option>
+					<option value="27.86"> 700 X 44 / 44-622 / 29 x 1.75 </option>
+					<option value="27.32"> 700 X 38 / 38-622 </option>
+					<option value="27.17"> 700 X 35 / 35-622 </option>
+					<option value="27"> 700 X 32 / 32-622 </option>
+					<option value="26.38"> 700 X 25 / 25-622 </option>
+					<option value="26.28"> 700 X 23 / 23-622 </option>
+					<option value="26.14"> 700 X 20 / 20-622 </option>
+				<option value="28"> 28 inch (nominal) </option>
+				<option value="28.15"> 28 X 1 1/2 / 40-635 </option>
+				<option value="26.53"> Tubular / Wide </option>
+				<option value="26.38"> Tubular / Narrow </option>
+				<option selected="selected" value="27"> 27 inch (nominal) </option>
+				<option value="27.18"> 27 X 1 3/8 / 35-630 </option>
+				<option value="27.08"> 27 X 1 1/4 / 32-630 </option>
+				<option value="27"> 27 X 1 1/8 / 28-630 </option>
+				<option value="26"> 26 inch (nominal) </option>
+				<option value="26.88"> 27 X 1 / 25-630 </option>
+				<option value="29.97"> 26 x 4.7 / 119-559 fatbike at 10 PSI</option> <!-- calculated from Bruce's easurement-->
+				<option value="29.07"> 26 x 4.25 / 108-559 fatbike at 10 PSI</option> <!-- calculated from Bruce's easurement-->
+				<option value="28.57"> 26 x 4.0 / 102-559 fatbike at 10 PSI</option> <!--measured by Bruce Ingle-->
+				<option value="28.17"> 26 x 3.8 / 97-559 fatbike at 10 PSI</option> <!-- calculated from Bruce's easurement-->
+				<option value="26.41"> 26 X 2.35 / 60-559 / MTB </option>
+				<option value="25.94"> 26 X 2.125 / 54-559 / MTB </option>
+				<option value="25.75"> 26 X 1.9 / 47-559 / MTB </option>
+				<option value="24.87"> 26 X 1.5 / 38-559 / MTB </option>
+				<option value="24.47"> 26 X 1.25 / 32-559 / MTB </option>
+				<option value="23.97"> 26 X 1.0 / 25-559 / MTB </option>
+				<option value="28.68"> 650B (“27.5”) x 3.0 / 76-584 / MTB</option>
+				<option value="28.48"> 650B (“27.5”) x 2.8 / 71-584 / MTB</option>
+				<option value="28.18"> 650B (“27.5”) x 2.5 / 64-584 / MTB</option>
+				<option value="27.68"> 650B (“27.5”) x 2.0 / 51-584 / MTB</option>
+                <option value="26.00"> 650 x 38B / 38-584 / 650B </option>
+				<option value="24.70"> 650 x 28C / 28-571 / 26" road/tri </option>
+				<option value="24.46"> 650 x 25C / 25-571 / 26" road/tri </option>
+				<option value="24.31"> 650 x 23C / 23-571 / 26" road/tri </option>
+				<option value="25.91"> 26 X 1 3/8 / 35-590 </option>
+				<option value="24"> 24" (nominal) </option>
+				<option value="21.97"> 24 x 1 / 25-520 </option>
+				<option value="24.35"> 24 x 2.5 / 65-507 </option>
+				<option value="24.15"> 24 x 2/3 / 60-507 </option>
+				<option value="23.95"> 24 x 2.1 / 54-507 </option>
+				<option value="20.15"> 32-451 /20 x 1 3/8 </option>
+				<option value="19.90"> 28-451/20 x 1 1/8 </option>
+				<option value="18.68"> 20 X 1.75 / 44-406 / BMX </option>
+				<option value="18.43"> 20 X 1.25 / 32-406 </option>
+				<option value="17.16"> 18 x 1.5 / 40-355 </option>
+				<option value="16.60"> 17 x 1 1/4 / 32-369 </option>
+				<option value="16.88"> 16 x 1 1/2 / 40-349 </option>
+				<option value="16.07"> 16 x 1 3/8 / 35-349 </option>
+				<option value="14.92"> 16 x 1.5 / 37-305 </option>
 			</select>
 
 <!-- .6366    165 / 25.4 12.7 added sizes 8/31/02-->
 			</th>
 		</tr>
-        
-<!--Tire width line goes here and is only one entry. This could go on the same line with rim size by reformatting into two columns. As the values do not overlap -- 0.75=4 inches, 19=125 mm, both oud be entered in the same field in the form and a multiplier used as needed. .--> 
-
-	     <tr>
-			<th>Tire width<br />
-			in mm</th>
-			<th>
-			<input type="text" name="nWidth" size="2" />
-			</th>
-		</tr>    
-        
-        
 		<tr>
 			<th colspan="2">Crank Length</th>
 			<th>
@@ -614,9 +568,6 @@ stickerWin.document.write("<BODY>")
 			</select>
 			</th>
 		</tr>
-        
- <!-- Gear units are used to select the different ways of measuring gearing -->     
-        
 		<tr>
 			<th colspan="2">Gear units</th>
 			<th>
@@ -639,9 +590,6 @@ stickerWin.document.write("<BODY>")
 			</select>
 			</th>
 		</tr>
-        
- <!-- there can be up to three chainrings. Note that each can have up to two digits and the values are initially empty.-->       
-        
 		<tr>
 			<th colspan="2">Chainring(s)</th>
 			<th>
@@ -650,9 +598,6 @@ stickerWin.document.write("<BODY>")
 			<input type="text" name="ring3" size="2" value="" />
 			</th>
 		</tr>
-        
-<!-- The options below are to enter cassettes. Note that the first options is for custom xprockets and refers to the second list below.-->       
-        
 		<tr>
 			<th rowspan="2" style="vertical-align:middle;">or</th>
 			<th>Cassette</th>
@@ -713,9 +658,9 @@ stickerWin.document.write("<BODY>")
 				<option value="11-12-13-14-15-17-19-21-24-28-32"> SunRace 11-12-13-14-15-17-19-21-24-28-32 11-speed </option>
 				<option value="11-12-13-15-17-19-21-24-28-32-36"> SunRace 11-12-13-15-17-19-21-24-28-32-36 11-speed </option><!--new-->
 				<option value="11-13-15-17-19-21-24-28-32-36-40"> SunRace 11-13-15-17-19-21-24-28-32-36-40 11-speed </option>
-				<option value="11-13-15-17-19-21-24-28-32-36-42"> SunRace 11-13-15-17-19-21-24-28-32-36-42 11-speed </option> 
-				<option value="11-13-15-18-21-24-28-32-36-42-46"> SunRace 11-13-15-18-21-24-28-32-36-42-46 11-speed </option><!--new--> 
-				<option value="11-13-15-18-21-24-28-32-36-42-50"> SunRace 11-13-15-18-21-24-28-32-36-42-50 11-speed </option><!--new--> 
+				<option value="11-13-15-17-19-21-24-28-32-36-42"> SunRace 11-13-15-17-19-21-24-28-32-36-42 11-speed </option>
+				<option value="11-13-15-18-21-24-28-32-36-42-46"> SunRace 11-13-15-18-21-24-28-32-36-42-46 11-speed </option><!--new-->
+				<option value="11-13-15-18-21-24-28-32-36-42-50"> SunRace 11-13-15-18-21-24-28-32-36-42-50 11-speed </option><!--new-->
 <!-- 21 -->		<option value="11-12-13-14-15-16-17-18-19-21"> Shimano 11-12-13-14-15-16-17-18-19-21 10-speed </option>
 				<option value="11-12-13-14-15-16-17-19-21-23"> Shimano 11-12-13-14-15-16-17-19-21-23 10-speed </option>
 				<option value="11-12-13-14-15-17-19-21-23-25"> Shimano 11-12-13-14-15-17-19-21-23-25 10-speed </option>
@@ -854,9 +799,6 @@ stickerWin.document.write("<BODY>")
 				<option value="14-16-18-20-22-24-28"> SunRace 14-16-18-20-22-24-28 7-speed Freewheel</option>			</select>
 			</th>
 		</tr>
-
-<!--This next section is for the line to enter one to 13 sprocket sizes manually.  -->
-
 		<tr>
 			<th>Custom Sprocket(s)<br />
 			(1 or more)</th>
@@ -876,9 +818,6 @@ stickerWin.document.write("<BODY>")
 			<input type="text" name="rear13" size="2" />
 			</th>
 		</tr>
-        
-<!-- Now display internal-gear hub names and enter internal-gear hub ratios-->        
-        
 		<tr>
 			<th colspan="2">Internal Hub</th>
 			<th>
@@ -1012,46 +951,46 @@ stickerWin.document.write("<BODY>")
 <!-- <th colspan="5"><input type=button name="" value="Clear" onClick="clearme()">    -->
 			</th>
 		</tr>
-	</table>  
-</form> <!-- end of the form which appears on the Web page.-->
+	</table>
+</form>
 <p class="center">
-	<img alt="Spoke Divider" src="https://www.sheldonbrown.com/images/spokeflop.gif" width="559" height="12" /> 
+	<img alt="Spoke Divider" src="https://www.sheldonbrown.com/images/spokeflop.gif" width="559" height="12" />
 </p>
 <p class="center">
 	The <a href="https://www.sheldonbrown.com/sachs-internal.html">SRAM/Sachs 3 x 7, 3 x 8, 3 x 9, 3 x 10</a> and the <a href="https://www.sheldonbrown.com/sturmey-archer_3-spd.html#current">Sturmey-Archer CS- RF3 and CS-RK3</a><br />
 	are the only recent/current production <a href="https://www.sheldonbrown.com/internal-gears.html">internal-gear hubs</a> designed to use rear sprocket clusters;<br />The Sturmey-Archer-Brompton <a href="https://chestercycling.wordpress.com/2013/05/22/inside-the-brompton-wide-range-bwr-hub/" target="_blank">BWR</a> takes two sprockets,<br />
-	but other models are included in the list for the benefit of tinkerers -- see <a href="https://www.sheldonbrown.com/internal-gears.html#hybrid">discussion</a>. 
+	but other models are included in the list for the benefit of tinkerers -- see <a href="https://www.sheldonbrown.com/internal-gears.html#hybrid">discussion</a>.
 </p>
 <!--<h2 class="center">
-	<a href="https://www.sheldonbrown.com/gears/index.html">Want a shorter list of internal-gear hubs? Click Here!</a> 
+	<a href="https://www.sheldonbrown.com/gears/index.html">Want a shorter list of internal-gear hubs? Click Here!</a>
 </h2>-->
 <p class="center">
 	<img alt="Spoke Divider" src="https://www.sheldonbrown.com/images/spokeflop.gif" width="559" height="12" />
 </p>
 <h2 class="center">
-	Too high-tech for you? <a href="https://www.sheldonbrown.com/sliderule.html">You can use your slide rule instead!</a> 
+	Too high-tech for you? <a href="https://www.sheldonbrown.com/sliderule.html">You can use your slide rule instead!</a>
 </h2>
 <p class="center">
-	<img alt="Spoke Divider" src="https://www.sheldonbrown.com/images/spoke.gif" width="559" height="12" /> 
+	<img alt="Spoke Divider" src="https://www.sheldonbrown.com/images/spoke.gif" width="559" height="12" />
 </p>
 <table class="plain" style="width:80%;">
 	<tr>
-		<th> 
+		<th>
 		<h2>
 			<a href="https://www.sheldonbrown.com/gain.html">Gain Ratios</a>
 		</h2>
 		</th>
-		<th> 
+		<th>
 		<h2>
 			<a href="https://www.sheldonbrown.com/gloss_g.html#gearinch">Gear Inches</a>
 		</h2>
 		</th>
-		<th> 
+		<th>
 		<h2>
 			<a href="https://www.sheldonbrown.com/gloss_da-o.html#development">Meters Development</a>
 		</h2>
 		</th>
-		<th> 
+		<th>
 		<h2>
 			<a href="https://www.sheldonbrown.com/gears/percentage.html">About Percentages</a>
 		</h2>
@@ -1098,30 +1037,30 @@ stickerWin.document.write("<BODY>")
             <li><a href="https://www.sheldonbrown.com/nexus-mech.html">Shimano internal-gear hubs</a></li>
 
             <li><a href="http://sheldonbrown.com/k7.html">Cassettes</a></li>
-            
+
             <li><a href="https://www.sheldonbrown.com/harris/hubs-internal.html">Hub Sales</a></li>
-            
+
         </ul>
 </div>
-    <h4 class="center">RPM range vs. speed is given in</h4> 
-    <h3 class="center"><a href="https://mike-sherman.github.io/shift/" target="_blank">Mike Sherman's gear calculator</a>.</h3> 
+    <h4 class="center">RPM range vs. speed is given in</h4>
+    <h3 class="center"><a href="https://mike-sherman.github.io/shift/" target="_blank">Mike Sherman's gear calculator</a>.</h3>
         <h4 class="center">If you want more numbers, including speed and cadence data,<br />
-		Jake Odell has a more elaborate gear calculator: 
+		Jake Odell has a more elaborate gear calculator:
 	    </h4>
 	<h3 class="center">
-		<a href="https://web.archive.org/web/20170505165637/http://www.soulbikes.com/gears/">HPV Drivetrain Analyzer</a> (note -- the page is available in the Internat archive but the calculator doesn't work).
+		<a href="http://cycletech.us/">HPV Drivetrain Analyzer</a> (It's back from the rubble of a lightning-struck server, true story. Jake Odell, thanks!)
 	</h3>
 	<h4 class="center">
-		Tom Kunicki has a calculator with specific features useful for fixed-gear and singlespeed riders: 
+		Tom Kunicki has a calculator with specific features useful for fixed-gear and singlespeed riders:
 	</h4>
 	<h3 class="center">
-		<a href="http://software.bareknucklebrigade.com/">"Rabbit, A Singlespeed and Fixed-gear Calculator"</a> 
+		<a href="http://software.bareknucklebrigade.com/">"Rabbit, A Singlespeed and Fixed-gear Calculator"</a>
 	</h3>
 	<h4 class="center">
-		<strong>John Allen has pages giving exact, fractional ratios calculated from gear tooth counts:</strong> 
+		<strong>John Allen has pages giving exact, fractional ratios calculated from gear tooth counts:</strong>
 	</h4>
 	<h3 class="center">
-		<a href="http://john-s-allen.com/gears/hubratios.htm"><strong>"Drive ratios of bicycle hub gears"</strong></a> 
+		<a href="http://john-s-allen.com/gears/hubratios.htm"><strong>"Drive ratios of bicycle hub gears"</strong></a>
 	</h3>
 
 <p class="center">
