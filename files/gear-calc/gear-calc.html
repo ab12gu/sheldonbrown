@@ -160,7 +160,7 @@
 
 <!-- To separate the tire width from the rim diameter, ccange this to something like this. 25.4 converts to inches-->
 
-<!--    ringData[n][c]=mphmult*(rings[n]/rears[c])*(wheelval+ 2 * tirewidth)0/(25.4*nMod)e;
+<!--    ringData[n][c]=mphmult*(rings[n]/rears[c])*(wheelval+ 2 * tirewidth)0/(25.4*nMod)e;/
 
 
         // tjl - Do rounding at printout instead - ringData[n][c]=rounder(mphmult*(rings[n]/rears[c])*wheelval/nMode);
@@ -177,8 +177,8 @@
         {
         var viewInteger, viewString   <!-- declare vairables-->
 
-        viewInteger=document.ringform.diameter.selectedIndex
-        viewString=document.ringform.diameter.options[viewInteger].value
+        viewInteger=document.ringform.diameter.selectedIndex 
+        viewString=document.ringform.diameter.options[viewInteger].value + 2 * document.ringform.nWidth.value;
         tiresize=document.ringform.diameter.options[viewInteger].text
         nWheel=parseFloat(viewString) <!-- This converts the text entry option for wheel diameter into a float -->
 
